@@ -1,0 +1,671 @@
+{
+	"info": {
+		"_postman_id": "f60756c4-f0bf-4c7c-852c-a38a0f2e4f03",
+		"name": "TSG Evaluación - API RESTful",
+		"description": "### Documentación de API RESTful.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13112347"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Registro exitoso\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", data.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "",
+									"description": "Obligatoria.",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"description": "Obligatoria, formato de email, debe ser unico.",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"description": "Obligatoria, 6 caracteres mínimo.",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "",
+									"description": "Obligatoria, igual a parametro password.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						},
+						"description": "### Registro de usuario con gestión de Token JWT.\n\nVariables requeridas:\n\n- **name :** _Obligatoria._\n    \n- **email :** _Obligatoria, formato de email, debe ser unico._\n    \n- **password :** _Obligatoria, 6 caracteres mínimo._\n    \n- **password_confirmation :** _Obligatoria, igual a password._"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login exitoso\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", data.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "",
+									"description": "Obligatoria, formato de email.",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"description": "Obligatoria, 6 caracteres mínimo",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "### Login de Usuario y gestión de Token JWT.\n\nVariables requeridas:\n\n- **email :** _Obligatoria, formato de email._\n    \n- **password :** _Obligatoria, 6 caracteres mínimo._"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Logout exitoso\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"pm.collectionVariables.unset(\"token\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{base_url}}/api/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						},
+						"description": "### Logout de usuario y desvinculación de token JWT.\n\n| _Requiere autenticación_"
+					},
+					"response": []
+				}
+			],
+			"description": "Controlador para gestionar sistema de Autenticación, comprendiendo Registro, Login y Logout."
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "List Posts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						},
+						"description": "### Listar Posts\n\n| _Requiere autenticación_"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "",
+									"description": "Obligatoria, string, 255 caracteres máximo",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"description": "Obligatoria, string, 16383 caracteres máximo.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						},
+						"description": "### Crear Post\n\n| _Requiere autenticación_\n\nVariables requeridas:\n\n- **title** : _Obligatoria, string, 255 caracteres máximo._\n    \n- **content** : _Obligatoria, string, 16383 caracteres máximo._"
+					},
+					"response": []
+				},
+				{
+					"name": "Show Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/posts/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Obligatoria, numerica."
+								}
+							]
+						},
+						"description": "### Mostrar Post\n\n| _Requiere autenticación_\n\nVariables requeridas:\n\n- **id :** _Obligatoria (en URL)_"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "",
+									"description": "string, 255 caracteres máximo.",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"description": "string, 16383 caracteres máximo",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Obligatoria, numerica"
+								}
+							]
+						},
+						"description": "### Actualizar Post\n\n| _Requiere autenticación_\n\nVariables requeridas:\n\n- **id :** _Obligatoria (en URL)_\n    \n\nVariables opcionales:\n\n- **title** : _string, 255 caracteres máximo._\n    \n- **content** : _string, 16383 caracteres máximo._"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/posts/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Obligatoria, numerica."
+								}
+							]
+						},
+						"description": "### Borrar Post\n\n| _Requiere autenticación_\n\nVariable requerida:\n\n- **id :** _Obligatoria (en URL)_"
+					},
+					"response": []
+				}
+			],
+			"description": "### CRUD - Control de Posts."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "List Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "### Listar Usuarios\n\n| _Requiere autenticación_"
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "",
+									"description": "Obligatoria,",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"description": "Obligatoria, formato de email, debe ser unico.",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"description": "Obligatoria, 6 caracteres minimo.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "### Crear Usuario\n\nVariables requeridas:\n\n- **name :** _Obligatoria._\n    \n- **email :** _Obligatoria, formato de email, debe ser unico._\n    \n- **password :** _Obligatoria, 6 caracteres mínimo._"
+					},
+					"response": []
+				},
+				{
+					"name": "Show User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Obligatoria, numerica."
+								}
+							]
+						},
+						"description": "### Mostrar Usuario\n\n| _Requiere autenticación_\n\nVariable requerida:\n\n- **id :** _Obligatoria (en URL)_"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "",
+									"description": "Opcional.",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"description": "Opcional, formato de email, debe ser unico.",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"description": "Opcional, 6 caracteres minimo.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Obligatoria, numerica."
+								}
+							]
+						},
+						"description": "### Actualizar Usuario\n\n| _Requiere autenticación_\n\nVariables requeridas:\n\n- **id :** _Obligatoria (en URL)_\n    \n\nVariables opcionales:\n\n- **name :** _Opcional._\n    \n- **email** : _Opcional, formato de email, debe ser unico_\n    \n- **password :** _Opcional, 6 caracteres mínimo._"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Obligatoria, numerica."
+								}
+							]
+						},
+						"description": "### Borrar Usuario\n\n| _Requiere autenticación_\n\nVariable requerida:\n\n- **id :** _Obligatoria (en URL)_"
+					},
+					"response": []
+				}
+			],
+			"description": "### CRUD - Control de Usuarios"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "tsg-crud.test",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -26,9 +27,10 @@ class UserController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        $data['password'] = bcrypt($data['password']);
+        $data['password'] = Hash::make($data['password']);
+        $user = User::create($data);
 
-        return User::create($data);
+        return response()->json($user, 201);
     }
 
     /**
@@ -37,7 +39,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return $user;
+        return response()->json($user);
     }
 
     /**
@@ -54,12 +56,12 @@ class UserController extends Controller
         ]);
 
         if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
+            $data['password'] = Hash::make($data['password']);
         }
 
         $user->update($data);
 
-        return $user;
+        return response()->json($user);
     }
 
     /**
